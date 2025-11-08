@@ -67,11 +67,13 @@ def generate_pdf(po_df, vendor):
     pdf.ln(10)
 
     for index, row in po_df.iterrows():
-        pdf.cell(200, 10, txt=f"{row['Description']} - {row['Quantity']} {row['Unit']} @ {row['Unit Cost']} = {row['Total Cost']}", ln=True)
+        line = f"{row['Description']} - {row['Quantity']} {row['Unit']} @ {row['Unit Cost']} = {row['Total Cost']}"
+        pdf.cell(200, 10, txt=line, ln=True)
 
-    pdf_output = BytesIO()
-    pdf.output(pdf_output)
-    return pdf_output
+    # Export to string, then encode to BytesIO
+    pdf_bytes = pdf.output(dest='S').encode('latin-1')
+    return BytesIO(pdf_bytes)
+
 
 # Export Excel
 def generate_excel(data):
